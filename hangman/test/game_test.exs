@@ -3,7 +3,7 @@ defmodule GameTest do
 
   alias Hangman.Game
 
-  test "ne_game() returns structure" do
+  test "new_game() returns structure" do
     game = Game.new_game()
 
     assert game.turns_left == 7
