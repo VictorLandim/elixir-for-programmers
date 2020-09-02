@@ -1,4 +1,6 @@
 defmodule Hangman.Game do
+  alias Hangman.Game
+
   defstruct(
     turns_left: 7,
     game_state: :initializing,
@@ -12,7 +14,7 @@ defmodule Hangman.Game do
   end
 
   def new_game(word) do
-    %Hangman.Game{
+    %Game{
       letters:
         word
         |> String.codepoints()
@@ -30,11 +32,11 @@ defmodule Hangman.Game do
     |> return_with_tally()
   end
 
-  def tally(game) do
+  def tally(game = %Game{}) do
     %{
       game_state: game.game_state,
       turns_left: game.turns_left,
-      used: game.used,
+      used: Enum.to_list(game.used),
       letters:
         game.letters
         |> reveal_guessed(game.used)
@@ -43,16 +45,16 @@ defmodule Hangman.Game do
 
   ################################################################
 
-  defp accept_move(game, _guess, _already_guessed = true) do
+  defp accept_move(game = %Game{}, _guess, _already_guessed = true) do
     Map.put(game, :game_state, :already_used)
   end
 
-  defp accept_move(game, guess, _) do
+  defp accept_move(game = %Game{}, guess, _) do
     Map.put(game, :used, MapSet.put(game.used, guess))
     |> score_guess(Enum.member?(game.letters, guess))
   end
 
-  defp score_guess(game, _good_guess = true) do
+  defp score_guess(game = %Game{}, _good_guess = true) do
     new_state =
       MapSet.new(game.letters)
       |> MapSet.subset?(game.used)
