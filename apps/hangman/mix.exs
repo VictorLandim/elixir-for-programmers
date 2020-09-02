@@ -5,6 +5,10 @@ defmodule Hangman.MixProject do
     [
       app: :hangman,
       version: "0.1.0",
+      build_path: "../../_build",
+      config_path: "../../config/config.exs",
+      deps_path: "../../deps",
+      lockfile: "../../mix.lock",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -20,8 +24,7 @@ defmodule Hangman.MixProject do
 
   defp deps do
     [
-      {:jason, "~> 1.0"},
-      {:dictionary, path: "../dictionary"}
+      {:dictionary, in_umbrella: true}
     ]
   end
 end
